@@ -26,6 +26,7 @@
 /* USER CODE BEGIN Includes */
 #include "Relay_Control.h"
 #include <stdio.h>
+#include "dwing.h"
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -46,10 +47,7 @@
 /* Private variables ---------------------------------------------------------*/
 
 /* USER CODE BEGIN PV */
-float current_height = 0.0f;
-float current_height_2 = 0.0f;
-float target_height = 50.0f;
-uint8_t work_mode = 0;
+
 /* USER CODE END PV */
 
 /* Private function prototypes -----------------------------------------------*/
@@ -60,18 +58,7 @@ void SystemClock_Config(void);
 
 /* Private user code ---------------------------------------------------------*/
 /* USER CODE BEGIN 0 */
-static void Report_Distance(const char *label, float distance)
-{
-	if (distance == -1.0f) {
-		uart_printf("%s: ERR echo rising timeout\r\n", label);
-	} else if (distance == -2.0f) {
-		uart_printf("%s: ERR echo stuck high\r\n", label);
-	} else if (distance == -3.0f) {
-		uart_printf("%s: ERR echo idle high\r\n", label);
-	} else {
-		uart_printf("%s: %.2f cm\r\n", label, distance);
-	}
-}
+
 /* USER CODE END 0 */
 
 /**
@@ -118,39 +105,8 @@ int main(void)
     /* USER CODE END WHILE */
 
     /* USER CODE BEGIN 3 */
-		current_height = Get_Distance();
-		Report_Distance("US1", current_height);
-		HAL_Delay(60);
+		Dwin_Now_Height();
 
-		current_height_2 = Get_Distance_2();
-		Report_Distance("US2", current_height_2);
-		HAL_Delay(250);
-		
-//		if(current_height < 0.0f){
-//			Bed_Updown(0);
-//			work_mode = 0;
-//			HAL_Delay(100);
-//			continue;
-//		}
-//
-//		if(work_mode == 1){
-//			if(current_height < (target_height - 1.0f)){
-//				Bed_Updown(1);
-//			}else if (current_height > (target_height + 1.0f)){
-//				Bed_Updown(2);
-//			}else{
-//				Bed_Updown(0);
-//				work_mode = 0;
-//			}
-//		}
-//
-//		if(current_height > 100.0f){
-//			Bed_Updown(0);
-//		}
-//		if(current_height < 20.0f){
-//			Bed_Updown(0);
-//		}
-//		HAL_Delay(50);
   }
   /* USER CODE END 3 */
 }
